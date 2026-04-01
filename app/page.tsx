@@ -1,14 +1,13 @@
-import { MetroSearch } from "@/components/metro-search"
+import { SearchContainer } from "@/components/containers/search"
 
 export default function Page() {
   return (
-    <div className="flex min-h-svh flex-col px-4 pt-6 pb-[env(safe-area-inset-bottom)] sm:px-6 sm:pt-10">
-      <div className="mx-auto flex w-full max-w-md flex-col justify-between gap-8">
+    <div className="flex h-svh flex-col overflow-hidden px-4 py-6 sm:px-6 sm:py-10">
+      <div className="mx-auto flex w-full max-w-md flex-1 flex-col gap-5 overflow-hidden">
         <header>
-          <h1 className="text-lg font-semibold text-center">Metro Route Finder</h1>
+          <h1 className="text-center text-lg font-semibold">Search stations</h1>
         </header>
-
-        <MetroSearch />
+        <SearchContainer />
       </div>
     </div>
   )
