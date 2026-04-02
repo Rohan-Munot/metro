@@ -17,8 +17,10 @@ export async function GET(request: NextRequest) {
   const routeType =
     type === "minimum-interchange" ? "minimum-interchange" : "least-distance"
 
-  // Backend expects ISO timestamp without trailing "Z"
-  const now = new Date().toISOString().replace("Z", "")
+  // Backend expects local IST timestamp (UTC+5:30) without trailing "Z"
+  const utc = new Date()
+  const ist = new Date(utc.getTime() + 5.5 * 60 * 60 * 1000)
+  const now = ist.toISOString().replace("Z", "")
   const path = `/station_route/${from}/${to}/${routeType}/${now}`
 
   try {

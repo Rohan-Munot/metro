@@ -2,7 +2,6 @@ import type { Station } from "@/lib/types"
 import {
   IconSearchOff,
   IconMapPin,
-  IconArrowRight,
   IconTrain,
 } from "@tabler/icons-react"
 import { StationCard } from "./station-card"
@@ -32,7 +31,7 @@ export const SearchResultContainer = ({
         {Array.from({ length: 3 }).map((_, i) => (
           <div
             key={i}
-            className="h-16 animate-pulse rounded-md border border-border bg-muted/30 motion-reduce:animate-none"
+            className="h-16 animate-pulse rounded-md border border-border bg-muted/60 motion-reduce:animate-none"
             style={{ animationDelay: `${i * 100}ms` }}
           />
         ))}
@@ -96,7 +95,7 @@ export const SearchResultContainer = ({
 
   return (
     <div className="flex flex-col gap-2">
-      <p className="sticky top-0 z-20 text-[11px] tracking-wide text-muted-foreground/50">
+      <p className="sticky top-0 z-20 text-[11px] tracking-wide text-muted-foreground/80 bg-card">
         {stations.length} station{stations.length !== 1 ? "s" : ""} found
         &mdash; tap to select
       </p>
