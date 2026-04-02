@@ -95,7 +95,7 @@ export const SearchResultContainer = ({
 
   return (
     <div className="flex flex-col gap-2">
-      <p className="sticky top-0 z-20 text-[11px] tracking-wide text-muted-foreground/80 bg-card">
+      <p className="sticky top-0 p-1 px-3.5 rounded-sm z-20 text-[11px] tracking-wide text-muted-foreground/80 bg-card">
         {stations.length} station{stations.length !== 1 ? "s" : ""} found
         &mdash; tap to select
       </p>

@@ -21,23 +21,32 @@ export function RouteResultContainer({
   if (!route) return null
 
   return (
-    <div className="flex flex-col gap-4">
-      <RouteTypeToggle
-        routeType={routeType}
-        onRouteTypeChange={onRouteTypeChange}
-      />
+    <div className="mx-auto flex w-full max-w-md animate-in flex-col bg-background px-4 py-2 duration-300 fill-mode-both fade-in slide-in-from-bottom-2">
+      <div className="flex w-full flex-col">
+        <RouteTypeToggle
+          routeType={routeType}
+          onRouteTypeChange={onRouteTypeChange}
+        />
 
-      <SummaryCard route={route} />
+        <div className="w-full">
+          <SummaryCard route={route} />
+        </div>
 
-      <div className="flex flex-col gap-2 pb-4">
-        {route.route.map((leg, i) => (
-          <JourneySegment
-            key={`${leg.line_no}-${leg.start}`}
-            leg={leg}
-            isFirst={i === 0}
-            isLast={i === route.route.length - 1}
-          />
-        ))}
+        <div className="flex flex-col gap-0 pt-2 pb-12">
+          {route.route.map((leg, i) => (
+            <div
+              key={`${leg.line_no}-${leg.start}`}
+              className="animate-in fill-mode-both fade-in"
+              style={{ animationDelay: `${50 + i * 50}ms` }}
+            >
+              <JourneySegment
+                leg={leg}
+                isFirst={i === 0}
+                isLast={i === route.route.length - 1}
+              />
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   )

@@ -12,31 +12,34 @@ export function RouteTypeToggle({
   onRouteTypeChange,
 }: RouteTypeToggleProps) {
   return (
-    <div className="flex gap-1 rounded-lg border border-border bg-card p-1">
+    <div className="flex w-full items-center rounded-md border border-border/80 bg-muted/20 p-1">
       <button
         type="button"
         onClick={() => onRouteTypeChange("least-distance")}
         className={cn(
-          "flex flex-1 items-center justify-center gap-1.5 rounded-md px-3 py-2 font-sans text-xs font-medium tracking-wide transition-colors",
+          "flex flex-1 items-center justify-center gap-2 rounded py-2 transition-all",
+          "font-sans text-sm font-semibold tracking-wide",
           routeType === "least-distance"
-            ? "bg-primary text-primary-foreground"
-            : "text-muted-foreground hover:text-foreground"
+            ? "bg-primary text-primary-foreground shadow-sm ring-1 ring-border/50"
+            : "bg-transparent text-muted-foreground hover:text-foreground"
         )}
       >
-        <IconRoute size={14} />
-        Shortest
+        <IconRoute size={14} stroke={2} />
+        Shortest Path
       </button>
+
       <button
         type="button"
         onClick={() => onRouteTypeChange("minimum-interchange")}
         className={cn(
-          "flex flex-1 items-center justify-center gap-1.5 rounded-md px-3 py-2 font-sans text-xs font-medium tracking-wide transition-colors",
+          "flex flex-1 items-center justify-center gap-2 rounded py-2 transition-all",
+          "font-sans text-sm font-semibold tracking-wide",
           routeType === "minimum-interchange"
-            ? "bg-primary text-primary-foreground"
-            : "text-muted-foreground hover:text-foreground"
+            ? "bg-primary text-primary-foreground shadow-sm ring-1 ring-border/50"
+            : "bg-transparent text-muted-foreground hover:text-foreground"
         )}
       >
-        <IconTransfer size={14} />
+        <IconTransfer size={14} stroke={2} />
         Min. Interchange
       </button>
     </div>

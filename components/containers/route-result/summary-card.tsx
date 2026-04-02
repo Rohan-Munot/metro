@@ -1,12 +1,5 @@
 import type { RouteResult } from "@/lib/types"
 import { formatTime, formatClockTime, addTime } from "@/lib/utils"
-import {
-  IconClock,
-  IconArrowRight,
-  IconTransfer,
-  IconMapPin,
-  IconCurrencyRupee,
-} from "@tabler/icons-react"
 
 interface SummaryCardProps {
   route: RouteResult
@@ -18,47 +11,53 @@ export function SummaryCard({ route }: SummaryCardProps) {
   const interchanges = route.route.length - 1
 
   return (
-    <div className="rounded-lg border border-border bg-card px-4 py-3">
-      {/* Row 1 — Duration & Fare (primary info, bold) */}
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-1.5">
-          <IconClock className="size-4.5 text-foreground/80" />
-          <span className="text-base font-bold text-primary tabular-nums">
-            {formatTime(route.total_time)}
+    <div className="flex w-full flex-col border-b border-border/60 pt-4 pb-6">
+      <div className="grid grid-cols-2 divide-x divide-border/60">
+        {/* Left Col: Duration */}
+        <div className="flex flex-col pr-4">
+          <span className="font-mono text-[10px] font-semibold tracking-widest text-muted-foreground/60 uppercase">
+            Trip Duration
           </span>
+          <div className="mt-1 flex items-baseline gap-1.5">
+            <span className="font-sans text-3xl font-bold tracking-tight text-foreground">
+              {formatTime(route.total_time)}
+            </span>
+          </div>
+          {startTime && endTime && (
+            <div className="mt-2 font-mono text-[11px] font-medium text-muted-foreground">
+              {formatClockTime(startTime)} — {formatClockTime(endTime)}
+            </div>
+          )}
         </div>
-        <div className="flex items-center gap-1.5">
-          <IconCurrencyRupee className="size-4.5 text-foreground/80" />
-          <span className="text-base font-bold text-primary tabular-nums">
-            {route.fare}
-          </span>
-        </div>
-      </div>
 
-      {/* Subtle divider */}
-      <div className="my-2 h-px bg-border/80" />
+        {/* Right Col: Stats */}
+        <div className="flex flex-col justify-between pl-4">
+          <div className="flex items-baseline justify-between">
+            <span className="font-mono text-[10px] font-semibold tracking-widest text-muted-foreground/60 uppercase">
+              Fare
+            </span>
+            <span className="font-sans text-lg font-bold tracking-tight text-foreground">
+              ₹{route.fare}
+            </span>
+          </div>
 
-      {/* Row 2 — Time range & Stats (supporting context, muted) */}
-      <div className="flex items-center justify-between text-sm text-accent-foreground">
-        {startTime && endTime ? (
-          <span className="flex items-center gap-1 tabular-nums">
-            {formatClockTime(startTime)}
-            <IconArrowRight className="size-3" />
-            {formatClockTime(endTime)}
-          </span>
-        ) : (
-          <span />
-        )}
+          <div className="flex items-baseline justify-between">
+            <span className="font-mono text-[10px] font-semibold tracking-widest text-muted-foreground/60 uppercase">
+              Stops
+            </span>
+            <span className="font-sans text-sm font-semibold text-foreground">
+              {route.stations}
+            </span>
+          </div>
 
-        <div className="flex items-center gap-3 text-sm text-accent-foreground">
-          <span className="flex items-center gap-1">
-            <IconMapPin className="size-4" />
-            {route.stations}
-          </span>
-          <span className="flex items-center gap-1">
-            <IconTransfer className="size-4" />
-            {interchanges}
-          </span>
+          <div className="flex items-baseline justify-between">
+            <span className="font-mono text-[10px] font-semibold tracking-widest text-muted-foreground/60 uppercase">
+              Changes
+            </span>
+            <span className="font-sans text-sm font-semibold text-foreground">
+              {interchanges}
+            </span>
+          </div>
         </div>
       </div>
     </div>
