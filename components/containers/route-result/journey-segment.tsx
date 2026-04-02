@@ -14,7 +14,7 @@ interface JourneySegmentProps {
   isLast: boolean
 }
 
-export function JourneySegment({ leg, isFirst, isLast }: JourneySegmentProps) {
+export function JourneySegment({ leg, isFirst }: JourneySegmentProps) {
   const [isExpanded, setIsExpanded] = useState(false)
   const colors = getLineColors(leg.line_no)
   const middleStations = leg.path.slice(1, -1)
