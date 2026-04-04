@@ -1,15 +1,23 @@
 "use client"
 
-import { IconArrowsUpDown } from "@tabler/icons-react"
+import {
+  IconArrowsUpDown,
+  IconCurrentLocation,
+  IconX,
+} from "@tabler/icons-react"
 import { Button } from "@/components/ui/button"
 import { SearchField } from "./search-field"
 import { useState } from "react"
 import { SearchResultContainer } from "../search-result"
 import { RouteResultContainer } from "../route-result"
+import { NearbyResultContainer } from "../nearby-result"
 import { useStationSearch } from "@/hooks/use-station-search"
 import { useRouteSearch } from "@/hooks/use-route-search"
+import { useGeolocation } from "@/hooks/use-geolocation"
+import { useNearbyStations } from "@/hooks/use-nearby-stations"
 import type { Station, RouteType } from "@/lib/types"
 import { titleCase } from "@/lib/formatters"
+import { cn } from "@/lib/utils"
 
 type ActiveField = "origin" | "destination"
 
@@ -37,6 +45,29 @@ export function SearchContainer({
   const [selectedDestination, setSelectedDestination] =
     useState<Station | null>(initialDestination ?? null)
 
+  // Geolocation state
+  const {
+    state: geoState,
+    request: requestLocation,
+    reset: resetGeo,
+  } = useGeolocation()
+  const isLocating = geoState.status === "locating"
+  const geoCoords =
+    geoState.status === "success"
+      ? { lat: geoState.lat, lng: geoState.lng }
+      : null
+  const geoError = geoState.status === "error" ? geoState.message : null
+
+  // Nearby stations from geolocation
+  const {
+    nearbyStations,
+    isLoading: nearbyLoading,
+    error: nearbyError,
+  } = useNearbyStations(geoCoords?.lat ?? null, geoCoords?.lng ?? null)
+
+  const showNearby =
+    geoState.status === "locating" || geoState.status === "success"
+
   const updateUrl = (params: URLSearchParams) => {
     const qs = params.toString()
     history.replaceState(null, "", qs ? `?${qs}` : window.location.pathname)
@@ -57,7 +88,7 @@ export function SearchContainer({
     stations,
     isLoading: searchLoading,
     hasSearched,
-  } = useStationSearch(activeQuery)
+  } = useStationSearch(showNearby ? "" : activeQuery)
 
   const {
     route,
@@ -81,6 +112,9 @@ export function SearchContainer({
 
   const handleSelect = (station: Station) => {
     const params = new URLSearchParams(window.location.search)
+
+    // Dismiss geo panel on selection
+    resetGeo()
 
     if (activeField === "origin") {
       setSelection("origin", station)
@@ -115,6 +149,8 @@ export function SearchContainer({
   }
 
   const handleChange = (field: ActiveField, value: string) => {
+    // Typing dismisses geo panel
+    resetGeo()
     if (field === "origin") {
       setOriginQuery(value)
       setSelectedOrigin(null)
@@ -123,6 +159,23 @@ export function SearchContainer({
       setSelectedDestination(null)
     }
   }
+
+  const handleLocationClick = () => {
+    // Clear any active search text so nearby panel takes focus
+    if (activeField === "origin") {
+      setOriginQuery("")
+      setSelectedOrigin(null)
+    } else {
+      setDestinationQuery("")
+      setSelectedDestination(null)
+    }
+    requestLocation()
+  }
+
+  const nearbyLabel =
+    activeField === "origin"
+      ? "Nearby stations — set as origin"
+      : "Nearby stations — set as destination"
 
   return (
     <div className="flex w-full flex-1 flex-col gap-4 overflow-hidden">
@@ -153,6 +206,56 @@ export function SearchContainer({
           <IconArrowsUpDown className="size-4.5" />
         </Button>
       </div>
+
+      {/* Use my location button */}
+      {!bothSelected && (
+        <div className="flex items-center gap-2">
+          <Button
+            variant="outline"
+            size="sm"
+            type="button"
+            disabled={isLocating}
+            onClick={handleLocationClick}
+            className={cn("flex-1 gap-2 text-xs", isLocating && "opacity-70")}
+          >
+            <IconCurrentLocation
+              size={14}
+              className={cn(isLocating && "animate-pulse")}
+            />
+            {isLocating ? "Locating..." : "Use my location"}
+          </Button>
+
+          {showNearby && (
+            <Button
+              variant="ghost"
+              size="icon"
+              type="button"
+              className="size-8 shrink-0 text-muted-foreground"
+              onClick={resetGeo}
+              aria-label="Dismiss location"
+            >
+              <IconX size={14} />
+            </Button>
+          )}
+        </div>
+      )}
+
+      {/* Geo error */}
+      {geoError && (
+        <div className="flex items-start gap-2.5 rounded-md bg-destructive/10 px-3 py-2.5">
+          <p className="flex-1 text-[11px] leading-relaxed text-destructive">
+            {geoError}
+          </p>
+          <button
+            type="button"
+            onClick={handleLocationClick}
+            className="shrink-0 text-[11px] font-medium text-destructive underline underline-offset-2"
+          >
+            Retry
+          </button>
+        </div>
+      )}
+
       <div className="flex-1 overflow-y-auto">
         {bothSelected ? (
           <RouteResultContainer
@@ -162,6 +265,14 @@ export function SearchContainer({
             onRetry={() => {}}
             routeType={routeType}
             onRouteTypeChange={setRouteType}
+          />
+        ) : showNearby ? (
+          <NearbyResultContainer
+            nearbyStations={nearbyStations}
+            isLoading={nearbyLoading}
+            error={nearbyError}
+            label={nearbyLabel}
+            onSelect={handleSelect}
           />
         ) : (
           <SearchResultContainer

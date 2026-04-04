@@ -53,3 +53,20 @@ export interface RouteResult {
   route: RouteLeg[]
   message: string
 }
+
+export type StationSource = "dmrc" | "google-only"
+
+export interface NearbyStation {
+  source: StationSource
+  station: Station | null
+  name: string
+  distance_m: number
+  lat: number
+  lng: number
+}
+
+export interface GeocodeResult {
+  lat: number
+  lng: number
+  formatted_address: string
+}
