@@ -43,9 +43,9 @@ export function useGeolocation() {
         })
       },
       {
-        enableHighAccuracy: false, // use network/Wi-Fi, not GPS — faster and more reliable
+        enableHighAccuracy: true,
         timeout: 15_000,
-        maximumAge: 5 * 60_000, // accept a cached position up to 5 min old
+        maximumAge: 5 * 60_000,
       }
     )
   }, [])
