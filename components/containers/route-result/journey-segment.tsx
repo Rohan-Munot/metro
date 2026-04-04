@@ -1,17 +1,16 @@
 "use client"
 
 import type { RouteResult } from "@/lib/types"
-import { titleCase } from "@/lib/utils"
 import { cn } from "@/lib/utils"
 import { getLineColors } from "./line-colors"
 import { InterchangeBadge } from "./interchange-badge"
 import { useState } from "react"
 import { IconPlus, IconMinus, IconClock } from "@tabler/icons-react"
+import { titleCase } from "@/lib/formatters"
 
 interface JourneySegmentProps {
   leg: RouteResult["route"][number]
   isFirst: boolean
-  isLast: boolean
 }
 
 export function JourneySegment({ leg, isFirst }: JourneySegmentProps) {
@@ -39,7 +38,7 @@ export function JourneySegment({ leg, isFirst }: JourneySegmentProps) {
             {leg.line}
           </span>
         </div>
-        <div className="font-mono text-[11px] font-semibold text-muted-foreground/60 flex items-center gap-1w">
+        <div className="font-mono text-[11px] font-semibold text-muted-foreground/60 flex items-center gap-1">
           <IconClock size={12} stroke={1.5} className="inline-block" />
          <span>{leg.path_time}</span>
         </div>
@@ -47,18 +46,17 @@ export function JourneySegment({ leg, isFirst }: JourneySegmentProps) {
 
       {/* Direction & Platform */}
       {leg.towards_station && (
-        <div className="flex flex-wrap items-center gap-1 pb-3 pl-6 font-sans text-[12px] text-muted-foreground">
-          <span>Towards</span>
-          <span className="font-medium text-foreground/80">
-            {titleCase(leg.towards_station)}
-          </span>
+        <div className="flex flex-wrap items-center gap-1 justify-between pb-3 pl-6 font-sans text-[12px] text-muted-foreground">
+          <div className="flex items-center gap-1">
+            <span>Towards</span>
+            <span className="font-medium text-foreground/80">
+              {titleCase(leg.towards_station)}
+            </span>
+          </div>
           {leg.platform_name && (
-            <>
-              <span className="mx-1 text-muted-foreground/40">&middot;</span>
-              <span className="rounded-sm border border-border/50 bg-muted/40 px-1.5 py-0.5 font-mono text-[10px] tracking-wider text-muted-foreground uppercase">
-                Platform {leg.platform_name.replace(/Platform No. /i, "")}
-              </span>
-            </>
+            <span className="rounded-sm border border-border/50 bg-muted/40 px-1.5 py-0.5 font-mono text-[10px] tracking-wider text-muted-foreground uppercase">
+              Platform {leg.platform_name.replace(/Platform No. /i, "")}
+            </span>
           )}
         </div>
       )}
@@ -77,7 +75,7 @@ export function JourneySegment({ leg, isFirst }: JourneySegmentProps) {
         <div className="relative flex items-center py-1">
           <div
             className={cn(
-              "absolute -left-[19px] h-2 w-2 rounded-sm border border-background",
+              "absolute -left-4.75 top-1  h-2 w-2 rounded-sm border border-background",
               colors.bg
             )}
           />
@@ -88,7 +86,7 @@ export function JourneySegment({ leg, isFirst }: JourneySegmentProps) {
 
         {/* Middle Stations Toggle & List */}
         {middleStations.length > 0 && (
-          <div className="py-1.5 pl-[1px]">
+          <div className="pt-1.5 pl-[1px]">
             <button
               onClick={() => setIsExpanded(!isExpanded)}
               className="flex items-center gap-1.5 rounded-sm bg-accent px-1.5 py-0.5 font-sans text-xs font-medium text-accent-foreground transition-colors hover:bg-muted/50 hover:text-foreground"
@@ -107,12 +105,12 @@ export function JourneySegment({ leg, isFirst }: JourneySegmentProps) {
                 isExpanded ? "max-h-[1000px] opacity-100" : "max-h-0 opacity-0"
               )}
             >
-              <div className="flex flex-col gap-2 py-2">
+              <div className="flex flex-col gap-2 pt-2">
                 {middleStations.map((station, i) => (
                   <div key={i} className="relative flex items-center">
                     <div
                       className={cn(
-                        "absolute -left-[18px] h-1.5 w-[1px]",
+                        "absolute -left-4.75 h-1.5 w-[1px]",
                         colors.bg
                       )}
                     />
@@ -130,7 +128,7 @@ export function JourneySegment({ leg, isFirst }: JourneySegmentProps) {
         <div className="relative mt-1 flex items-center py-1">
           <div
             className={cn(
-              "absolute -left-[19px] h-2 w-2 rounded-sm border border-background",
+              "absolute -left-[19px] bottom-1 h-2 w-2 rounded-sm border border-background",
               colors.bg
             )}
           />

@@ -1,5 +1,6 @@
 import type { RouteResult, RouteType } from "@/lib/types"
 import { LoadingSkeleton } from "./loading-skeleton"
+import { ErrorState } from "./error-state"
 import { RouteTypeToggle } from "./route-type-toggle"
 import { SummaryCard } from "./summary-card"
 import { JourneySegment } from "./journey-segment"
@@ -7,6 +8,8 @@ import { JourneySegment } from "./journey-segment"
 interface RouteResultContainerProps {
   route: RouteResult | null
   isLoading: boolean
+  error: Error | null
+  onRetry: () => void
   routeType: RouteType
   onRouteTypeChange: (type: RouteType) => void
 }
@@ -14,10 +17,13 @@ interface RouteResultContainerProps {
 export function RouteResultContainer({
   route,
   isLoading,
+  error,
+  onRetry,
   routeType,
   onRouteTypeChange,
 }: RouteResultContainerProps) {
   if (isLoading) return <LoadingSkeleton />
+  if (error) return <ErrorState onRetry={onRetry} />
   if (!route) return null
 
   return (
@@ -42,7 +48,6 @@ export function RouteResultContainer({
               <JourneySegment
                 leg={leg}
                 isFirst={i === 0}
-                isLast={i === route.route.length - 1}
               />
             </div>
           ))}

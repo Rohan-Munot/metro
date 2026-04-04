@@ -1,8 +1,4 @@
-import { IconArrowsExchange } from "@tabler/icons-react"
-
-/* ------------------------------------------------------------------ */
-/*  Interchange badge — shown between journey segments at transfers     */
-/* ------------------------------------------------------------------ */
+import { IconArrowsExchange, IconWalk } from "@tabler/icons-react"
 
 interface InterchangeBadgeProps {
   minutes: number
@@ -15,12 +11,13 @@ export function InterchangeBadge({ minutes }: InterchangeBadgeProps) {
         size={16}
         className="shrink-0 text-muted-foreground"
       />
-      <span className="font-sans text-sm tracking-wide text-muted-foreground">
-        Change here{" "}
-        <span className="font-mono text-xs text-muted-foreground/70">
-          &middot; {minutes} min
-        </span>
-      </span>
+      <div className="font-sans text-sm tracking-wide text-muted-foreground flex justify-between w-full items-center">
+        <span>Change here</span>
+        <div className="font-mono text-xs text-muted-foreground/70 flex items-center gap-1">
+          <IconWalk  className="inline-block size-4" />
+         {minutes} min
+        </div>
+      </div>
     </div>
   )
 }

@@ -1,16 +1,6 @@
 import { useQuery } from "@tanstack/react-query"
-import type { RouteResult, RouteType } from "@/lib/types"
-
-async function fetchRoute(
-  from: string,
-  to: string,
-  type: RouteType
-): Promise<RouteResult> {
-  const params = new URLSearchParams({ from, to, type })
-  const res = await fetch(`/api/metro/route?${params}`)
-  if (!res.ok) throw new Error(`Route fetch failed: ${res.status}`)
-  return res.json()
-}
+import type { RouteType } from "@/lib/types"
+import { fetchRoute } from "@/lib/metro/client"
 
 export function useRouteSearch(
   fromCode: string | null,

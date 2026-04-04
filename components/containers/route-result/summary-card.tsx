@@ -1,5 +1,5 @@
 import type { RouteResult } from "@/lib/types"
-import { formatTime, formatClockTime, addTime } from "@/lib/utils"
+import { formatTime, formatClockTime, addTime } from "@/lib/formatters"
 
 interface SummaryCardProps {
   route: RouteResult

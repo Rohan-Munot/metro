@@ -53,7 +53,7 @@ export const SearchResultContainer = ({
             No stations found for &ldquo;{query}&rdquo;
           </p>
           <p className="mt-1 text-[11px] text-muted-foreground/50">
-            Try a different search term
+            Try a station name or a place like &ldquo;India Gate&rdquo;
           </p>
         </div>
       </div>
@@ -87,7 +87,7 @@ export const SearchResultContainer = ({
           </div>
         </div>
         <p className="mt-1.5 max-w-55 text-center text-xs leading-relaxed text-muted-foreground/50">
-          Start by searching
+          Search for a station or place
         </p>
       </div>
     )

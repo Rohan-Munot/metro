@@ -1,10 +1,14 @@
 import { Button } from "@/components/ui/button"
-import { Station } from "@/lib/types"
-import { cn, titleCase } from "@/lib/utils"
-import { IconArrowsExchange, IconElevator, IconParking, IconWheelchair } from "@tabler/icons-react";
-import { ComponentType } from "react";
-
-
+import { cn } from "@/lib/utils"
+import {
+  IconArrowsExchange,
+  IconElevator,
+  IconParking,
+  IconWheelchair,
+} from "@tabler/icons-react"
+import type { ComponentType } from "react"
+import { titleCase } from "@/lib/formatters"
+import type { Station } from "@/lib/types"
 
 const facilityMap: Record<
   string,
@@ -16,7 +20,6 @@ const facilityMap: Record<
   "flaticon-exchange": { icon: IconArrowsExchange, label: "Interchange" },
 }
 
-
 export function StationCard({
   station,
   index,
@@ -25,8 +28,7 @@ export function StationCard({
   station: Station
   index: number
   onSelect: (station: Station) => void
-  }) {
-
+}) {
   return (
     <Button
       variant="ghost"
