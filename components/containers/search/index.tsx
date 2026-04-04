@@ -208,6 +208,7 @@ export function SearchContainer({
             type="button"
             className="swap-button size-8 text-primary"
             onClick={handleSwap}
+            disabled={!bothSelected}
           >
             <IconArrowsUpDown className="size-4.5" />
           </Button>

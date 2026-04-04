@@ -16,6 +16,10 @@ interface SearchResultContainerProps {
   onSelect: (station: Station) => void
 }
 
+/**
+ * Handles the entire "no direct station match" flow as a single unified state.
+ * The user sees: loading → nearby results OR a single error. Never two errors.
+ */
 function LandmarkFallback({
   query,
   onSelect,
@@ -32,24 +36,60 @@ function LandmarkFallback({
 
   const isLoading = geocodeLoading || (geocode !== null && nearbyLoading)
 
-  if (!geocode && !geocodeLoading) {
-    // Geocoding returned nothing — just show no results
-    return null
+  // Still working — show skeletons
+  if (isLoading) {
+    return (
+      <div
+        className="flex flex-col gap-2"
+        role="status"
+        aria-label="Searching nearby stations"
+      >
+        <p className="px-3.5 text-[11px] tracking-wide text-muted-foreground/60">
+          Searching for nearby metro stations&hellip;
+        </p>
+        {Array.from({ length: 3 }).map((_, i) => (
+          <div
+            key={i}
+            className="h-16 animate-pulse rounded-md border border-border bg-muted/60 motion-reduce:animate-none"
+            style={{ animationDelay: `${i * 100}ms` }}
+          />
+        ))}
+      </div>
+    )
   }
 
-  const label = geocode
-    ? `Nearest metro to ${geocode.formatted_address.split(",")[0]}`
-    : "Finding nearest metro..."
-
-  return (
-    <div className="mt-4">
+  // Geocode found a location AND nearby stations exist — show them
+  if (geocode && nearbyStations.length > 0 && !nearbyError) {
+    const label = `Nearest metro to ${geocode.formatted_address.split(",")[0]}`
+    return (
       <NearbyResultContainer
         nearbyStations={nearbyStations}
-        isLoading={isLoading}
-        error={nearbyError}
+        isLoading={false}
+        error={null}
         label={label}
         onSelect={onSelect}
       />
+    )
+  }
+
+  // Everything failed — single unified error
+  return (
+    <div className="flex flex-col items-center gap-3 py-10 text-center">
+      <IconSearchOff
+        size={28}
+        strokeWidth={1.5}
+        className="text-muted-foreground/30"
+        aria-hidden="true"
+      />
+      <div>
+        <p className="text-sm text-muted-foreground">
+          No results for &ldquo;{query}&rdquo;
+        </p>
+        <p className="mt-1.5 max-w-[240px] text-[11px] leading-relaxed text-muted-foreground/50">
+          Try a specific landmark or station name, e.g.
+          &ldquo;India&nbsp;Gate&rdquo; or &ldquo;Rajiv&nbsp;Chowk&rdquo;
+        </p>
+      </div>
     </div>
   )
 }
@@ -80,27 +120,7 @@ export const SearchResultContainer = ({
   }
 
   if (hasSearched && stations.length === 0) {
-    return (
-      <div className="flex flex-col">
-        <div className="flex flex-col items-center gap-3 py-8 text-center">
-          <IconSearchOff
-            size={28}
-            strokeWidth={1.5}
-            className="text-muted-foreground/30"
-            aria-hidden="true"
-          />
-          <div>
-            <p className="text-sm text-muted-foreground">
-              No stations found for &ldquo;{query}&rdquo;
-            </p>
-            <p className="mt-1 text-[11px] text-muted-foreground/50">
-              Searching for nearest metro station...
-            </p>
-          </div>
-        </div>
-        <LandmarkFallback query={query} onSelect={onSelect} />
-      </div>
-    )
+    return <LandmarkFallback query={query} onSelect={onSelect} />
   }
 
   if (!hasSearched) {
