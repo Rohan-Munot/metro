@@ -42,7 +42,9 @@ export async function fetchStations(query: string): Promise<Station[]> {
   return data
 }
 
-export async function fetchStationByCode(code: string): Promise<Station | null> {
+export async function fetchStationByCode(
+  code: string
+): Promise<Station | null> {
   const stations = await fetchStations(code)
   if (stations.length === 0) {
     return null
@@ -50,8 +52,9 @@ export async function fetchStationByCode(code: string): Promise<Station | null> 
 
   const normalizedCode = code.toUpperCase()
   return (
-    stations.find((station) => station.station_code.toUpperCase() === normalizedCode) ??
-    stations[0]
+    stations.find(
+      (station) => station.station_code.toUpperCase() === normalizedCode
+    ) ?? stations[0]
   )
 }
 

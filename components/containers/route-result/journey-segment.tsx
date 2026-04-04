@@ -38,15 +38,15 @@ export function JourneySegment({ leg, isFirst }: JourneySegmentProps) {
             {leg.line}
           </span>
         </div>
-        <div className="font-mono text-[11px] font-semibold text-muted-foreground/60 flex items-center gap-1">
+        <div className="flex items-center gap-1 font-mono text-[11px] font-semibold text-muted-foreground/60">
           <IconClock size={12} stroke={1.5} className="inline-block" />
-         <span>{leg.path_time}</span>
+          <span>{leg.path_time}</span>
         </div>
       </div>
 
       {/* Direction & Platform */}
       {leg.towards_station && (
-        <div className="flex flex-wrap items-center gap-1 justify-between pb-3 pl-6 font-sans text-[12px] text-muted-foreground">
+        <div className="flex flex-wrap items-center justify-between gap-1 pb-3 pl-6 font-sans text-[12px] text-muted-foreground">
           <div className="flex items-center gap-1">
             <span>Towards</span>
             <span className="font-medium text-foreground/80">
@@ -75,7 +75,7 @@ export function JourneySegment({ leg, isFirst }: JourneySegmentProps) {
         <div className="relative flex items-center py-1">
           <div
             className={cn(
-              "absolute -left-4.75 top-1  h-2 w-2 rounded-sm border border-background",
+              "absolute top-1 -left-4.75 h-2 w-2 rounded-sm border border-background",
               colors.bg
             )}
           />
@@ -128,7 +128,7 @@ export function JourneySegment({ leg, isFirst }: JourneySegmentProps) {
         <div className="relative mt-1 flex items-center py-1">
           <div
             className={cn(
-              "absolute -left-[19px] bottom-1 h-2 w-2 rounded-sm border border-background",
+              "absolute bottom-1 -left-[19px] h-2 w-2 rounded-sm border border-background",
               colors.bg
             )}
           />

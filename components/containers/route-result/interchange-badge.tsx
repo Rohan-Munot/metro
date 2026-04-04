@@ -11,11 +11,11 @@ export function InterchangeBadge({ minutes }: InterchangeBadgeProps) {
         size={16}
         className="shrink-0 text-muted-foreground"
       />
-      <div className="font-sans text-sm tracking-wide text-muted-foreground flex justify-between w-full items-center">
+      <div className="flex w-full items-center justify-between font-sans text-sm tracking-wide text-muted-foreground">
         <span>Change here</span>
-        <div className="font-mono text-xs text-muted-foreground/70 flex items-center gap-1">
-          <IconWalk  className="inline-block size-4" />
-         {minutes} min
+        <div className="flex items-center gap-1 font-mono text-xs text-muted-foreground/70">
+          <IconWalk className="inline-block size-4" />
+          {minutes} min
         </div>
       </div>
     </div>

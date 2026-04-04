@@ -1,4 +1,3 @@
-
 export function formatTime(time: string): string {
   const parts = time.split(":").map(Number)
   const hours = parts[0] ?? 0

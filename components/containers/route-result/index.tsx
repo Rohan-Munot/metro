@@ -45,10 +45,7 @@ export function RouteResultContainer({
               className="animate-in fill-mode-both fade-in"
               style={{ animationDelay: `${50 + i * 50}ms` }}
             >
-              <JourneySegment
-                leg={leg}
-                isFirst={i === 0}
-              />
+              <JourneySegment leg={leg} isFirst={i === 0} />
             </div>
           ))}
         </div>

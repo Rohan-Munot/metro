@@ -2,7 +2,6 @@ import { NextRequest, NextResponse } from "next/server"
 import { metroFetch } from "../fetch"
 import type { Station } from "@/lib/types"
 
-
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url)
   const query = searchParams.get("q")?.trim()

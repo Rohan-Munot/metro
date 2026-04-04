@@ -3,6 +3,7 @@
 import type { NearbyStation, Station } from "@/lib/types"
 import { IconSearchOff, IconMapPin, IconTrain } from "@tabler/icons-react"
 import { StationCard } from "./station-card"
+import { MetroMapIllustration } from "./metro-map-illustration"
 import { NearbyResultContainer } from "../nearby-result"
 import { useGeocode } from "@/hooks/use-geocode"
 import { useNearbyStations } from "@/hooks/use-nearby-stations"
@@ -104,32 +105,10 @@ export const SearchResultContainer = ({
 
   if (!hasSearched) {
     return (
-      <div className="flex flex-col items-center px-6 py-10">
-        <div className="relative mb-6">
-          <div className="flex items-center gap-3 text-muted-foreground/60">
-            <IconMapPin size={20} strokeWidth={1.5} />
-            <div className="flex items-center gap-1.5">
-              <span className="h-px w-6 bg-muted-foreground/15" />
-              <span className="h-px w-1.5 bg-muted-foreground/15" />
-              <span className="h-px w-1.5 bg-muted-foreground/15" />
-              <span className="h-px w-6 bg-muted-foreground/15" />
-            </div>
-            <IconTrain
-              size={20}
-              strokeWidth={1.5}
-              className="text-primary/30"
-            />
-            <div className="flex items-center gap-1.5">
-              <span className="h-px w-6 bg-muted-foreground/15" />
-              <span className="h-px w-1.5 bg-muted-foreground/15" />
-              <span className="h-px w-1.5 bg-muted-foreground/15" />
-              <span className="h-px w-6 bg-muted-foreground/15" />
-            </div>
-            <IconMapPin size={20} strokeWidth={1.5} />
-          </div>
-        </div>
-        <p className="mt-1.5 max-w-55 text-center text-xs leading-relaxed text-muted-foreground/50">
-          Search for a station or place
+      <div className="flex flex-col items-center px-4 py-8">
+        <MetroMapIllustration />
+        <p className="mt-2 max-w-[220px] text-center text-xs leading-relaxed tracking-wide text-muted-foreground/45">
+          Search for a metro station or a landmark
         </p>
       </div>
     )

@@ -24,11 +24,7 @@ export default function RootLayout({
     <html
       lang="en"
       suppressHydrationWarning
-      className={cn(
-        "antialiased",
-        fontSans.variable,
-        jetbrainsMono.variable
-      )}
+      className={cn("antialiased", fontSans.variable, jetbrainsMono.variable)}
     >
       <body>
         <QueryProvider>
