@@ -27,7 +27,7 @@ export function RouteResultContainer({
   if (!route) return null
 
   return (
-    <div className="mx-auto flex w-full max-w-md animate-in flex-col bg-background px-4 py-2 duration-300 fill-mode-both fade-in slide-in-from-bottom-2">
+    <div className="mx-auto flex w-full max-w-md animate-in flex-col bg-background px-1.5 duration-300 fill-mode-both fade-in slide-in-from-bottom-2">
       <div className="flex w-full flex-col">
         <RouteTypeToggle
           routeType={routeType}
