@@ -1,10 +1,6 @@
 "use client"
 
-import {
-  IconArrowsUpDown,
-  IconCurrentLocation,
-  IconX,
-} from "@tabler/icons-react"
+import { IconArrowsUpDown, IconCurrentLocation } from "@tabler/icons-react"
 import { Button } from "@/components/ui/button"
 import { SearchField } from "./search-field"
 import { useState } from "react"
@@ -51,12 +47,10 @@ export function SearchContainer({
     request: requestLocation,
     reset: resetGeo,
   } = useGeolocation()
-  const isLocating = geoState.status === "locating"
   const geoCoords =
     geoState.status === "success"
       ? { lat: geoState.lat, lng: geoState.lng }
       : null
-  const geoError = geoState.status === "error" ? geoState.message : null
 
   // Nearby stations from geolocation
   const {
@@ -144,8 +138,19 @@ export function SearchContainer({
   }
 
   const handleSwap = () => {
+    const params = new URLSearchParams(window.location.search)
+
     setSelection("origin", selectedDestination)
     setSelection("destination", selectedOrigin)
+
+    if (selectedDestination)
+      params.set("origin", selectedDestination.station_name)
+    else params.delete("origin")
+
+    if (selectedOrigin) params.set("destination", selectedOrigin.station_name)
+    else params.delete("destination")
+
+    updateUrl(params)
   }
 
   const handleChange = (field: ActiveField, value: string) => {
@@ -182,79 +187,47 @@ export function SearchContainer({
       <div className="flex items-center justify-center gap-2.5 rounded-lg border border-border bg-card p-3">
         <div className="flex flex-1 flex-col gap-2">
           <SearchField
-            placeholder="Search station or place"
+            placeholder="e.g. Rajiv Chowk"
             value={originQuery}
             onChange={(value) => handleChange("origin", value)}
             onFocus={() => setActiveField("origin")}
             onClear={() => handleClear("origin")}
           />
           <SearchField
-            placeholder="Search station or place"
+            placeholder="e.g. India Gate"
             value={destinationQuery}
             onChange={(value) => handleChange("destination", value)}
             onFocus={() => setActiveField("destination")}
             onClear={() => handleClear("destination")}
           />
         </div>
-        <Button
-          variant="outline"
-          size="icon"
-          type="button"
-          className="swap-button size-8 text-primary"
-          onClick={handleSwap}
-        >
-          <IconArrowsUpDown className="size-4.5" />
-        </Button>
-      </div>
-
-      {/* Use my location button */}
-      {!bothSelected && (
-        <div className="flex items-center gap-2">
+        <div className="flex flex-col gap-2">
           <Button
             variant="outline"
-            size="sm"
+            size="icon"
             type="button"
-            disabled={isLocating}
-            onClick={handleLocationClick}
-            className={cn("flex-1 gap-2 text-xs", isLocating && "opacity-70")}
+            className="swap-button size-8 text-primary"
+            onClick={handleSwap}
           >
-            <IconCurrentLocation
-              size={14}
-              className={cn(isLocating && "animate-pulse")}
-            />
-            {isLocating ? "Locating..." : "Use my location"}
+            <IconArrowsUpDown className="size-4.5" />
           </Button>
-
-          {showNearby && (
+          {!bothSelected && (
             <Button
-              variant="ghost"
+              variant="outline"
               size="icon"
               type="button"
-              className="size-8 shrink-0 text-muted-foreground"
-              onClick={resetGeo}
-              aria-label="Dismiss location"
+              onClick={handleLocationClick}
+              className={cn(
+                "size-8 text-primary transition-all",
+                activeField === "destination" && "mt-auto"
+              )}
+              aria-label="Use my location"
             >
-              <IconX size={14} />
+              <IconCurrentLocation className="size-4.5" />
             </Button>
           )}
         </div>
-      )}
-
-      {/* Geo error */}
-      {geoError && (
-        <div className="flex items-start gap-2.5 rounded-md bg-destructive/10 px-3 py-2.5">
-          <p className="flex-1 text-[11px] leading-relaxed text-destructive">
-            {geoError}
-          </p>
-          <button
-            type="button"
-            onClick={handleLocationClick}
-            className="shrink-0 text-[11px] font-medium text-destructive underline underline-offset-2"
-          >
-            Retry
-          </button>
-        </div>
-      )}
+      </div>
 
       <div className="flex-1 overflow-y-auto">
         {bothSelected ? (
