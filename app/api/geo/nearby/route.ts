@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server"
-import { metroFetch } from "@/app/api/metro/fetch"
-import type { NearbyStation, Station } from "@/lib/types"
+import { fetchStationByNameServer } from "@/lib/metro/server"
+import type { NearbyStation } from "@/lib/types"
 
 const GEO_API_KEY = process.env.GEO_API
 
@@ -19,33 +19,6 @@ function haversineMetres(
     Math.sin(dLat / 2) ** 2 +
     Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.sin(dLng / 2) ** 2
   return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))
-}
-
-async function findDmrcStation(name: string): Promise<Station | null> {
-  try {
-    const res = await metroFetch(
-      `/station_by_keyword/all/${encodeURIComponent(name)}`
-    )
-    if (!res.ok) return null
-    const data: unknown = await res.json()
-    if (!Array.isArray(data) || data.length === 0) return null
-
-    // Normalise the search name for fuzzy matching
-    const normalised = name.toLowerCase().replace(/\s+/g, " ").trim()
-
-    // Try exact name match first, then partial
-    const exact = (data as Station[]).find(
-      (s) => s.station_name.toLowerCase() === normalised
-    )
-    if (exact) return exact
-
-    const partial = (data as Station[]).find((s) =>
-      s.station_name.toLowerCase().includes(normalised.split(" ")[0])
-    )
-    return partial ?? (data as Station[])[0]
-  } catch {
-    return null
-  }
 }
 
 export async function GET(req: NextRequest) {
@@ -99,7 +72,7 @@ export async function GET(req: NextRequest) {
         haversineMetres(lat, lng, stationLat, stationLng)
       )
 
-      const dmrcStation = await findDmrcStation(name)
+      const dmrcStation = await fetchStationByNameServer(name)
 
       return {
         source: dmrcStation ? "dmrc" : "google-only",

@@ -1,6 +1,7 @@
 import type { NearbyStation, Station } from "@/lib/types"
 import { IconMapPinOff } from "@tabler/icons-react"
 import { NearbyStationCard } from "./nearby-station-card"
+import { ResultListSkeleton } from "@/components/ui/result-list-skeleton"
 
 interface NearbyResultContainerProps {
   nearbyStations: NearbyStation[]
@@ -18,21 +19,7 @@ export function NearbyResultContainer({
   onSelect,
 }: NearbyResultContainerProps) {
   if (isLoading) {
-    return (
-      <div
-        className="flex flex-col gap-2"
-        role="status"
-        aria-label="Finding nearby stations"
-      >
-        {Array.from({ length: 3 }).map((_, i) => (
-          <div
-            key={i}
-            className="h-16 animate-pulse rounded-md border border-border bg-muted/60 motion-reduce:animate-none"
-            style={{ animationDelay: `${i * 100}ms` }}
-          />
-        ))}
-      </div>
-    )
+    return <ResultListSkeleton aria-label="Finding nearby stations" />
   }
 
   if (error) {
@@ -71,7 +58,7 @@ export function NearbyResultContainer({
   return (
     <div className="flex flex-col gap-2">
       <p className="sticky top-0 z-20 rounded-sm bg-card p-1 px-3.5 text-[11px] tracking-wide text-muted-foreground/80">
-        {label} &mdash; tap to select
+        {label}
       </p>
       <div className="flex flex-col gap-2">
         {nearbyStations.map((nearby, i) => (

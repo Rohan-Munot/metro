@@ -1,12 +1,13 @@
 "use client"
 
-import type { NearbyStation, Station } from "@/lib/types"
-import { IconSearchOff, IconMapPin, IconTrain } from "@tabler/icons-react"
+import type { Station } from "@/lib/types"
+import { IconSearchOff } from "@tabler/icons-react"
 import { StationCard } from "./station-card"
 import { MetroMapIllustration } from "./metro-map-illustration"
 import { NearbyResultContainer } from "../nearby-result"
 import { useGeocode } from "@/hooks/use-geocode"
 import { useNearbyStations } from "@/hooks/use-nearby-stations"
+import { ResultListSkeleton } from "@/components/ui/result-list-skeleton"
 
 interface SearchResultContainerProps {
   stations: Station[]
@@ -39,21 +40,11 @@ function LandmarkFallback({
   // Still working — show skeletons
   if (isLoading) {
     return (
-      <div
-        className="flex flex-col gap-2"
-        role="status"
-        aria-label="Searching nearby stations"
-      >
+      <div className="flex flex-col gap-2">
         <p className="px-3.5 text-[11px] tracking-wide text-muted-foreground/60">
           Searching for nearby metro stations&hellip;
         </p>
-        {Array.from({ length: 3 }).map((_, i) => (
-          <div
-            key={i}
-            className="h-16 animate-pulse rounded-md border border-border bg-muted/60 motion-reduce:animate-none"
-            style={{ animationDelay: `${i * 100}ms` }}
-          />
-        ))}
+        <ResultListSkeleton aria-label="Searching nearby stations" />
       </div>
     )
   }
@@ -102,21 +93,7 @@ export const SearchResultContainer = ({
   onSelect,
 }: SearchResultContainerProps) => {
   if (isLoading) {
-    return (
-      <div
-        className="flex flex-col gap-2"
-        role="status"
-        aria-label="Loading stations"
-      >
-        {Array.from({ length: 3 }).map((_, i) => (
-          <div
-            key={i}
-            className="h-16 animate-pulse rounded-md border border-border bg-muted/60 motion-reduce:animate-none"
-            style={{ animationDelay: `${i * 100}ms` }}
-          />
-        ))}
-      </div>
-    )
+    return <ResultListSkeleton aria-label="Loading stations" />
   }
 
   if (hasSearched && stations.length === 0) {
